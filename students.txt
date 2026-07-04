@@ -1,3 +1,2 @@
-Rohit,21,100
-Rahul,22,100
-Sumeet,21,10
+Rohit,21,98
+Rohit,22,100

@@ -9,30 +9,45 @@ def menu():
     print("6. lowest marked students record")
     print("7. exit")
     while True:
-        choice = int(input("enter your choice :"))
-        if choice == 1:
-            add_record()
-        elif choice == 2:
-            view_record()
-        elif choice == 3:
-            search_record()
-        elif choice == 4:
-            total_students()  
-        elif choice == 5:
-            high_score()
-        elif choice == 6:
-            lowest_score()  
-        elif choice ==7:
-            break
-        else:
-            print("invalid input")
+        try:
+            choice = int(input("enter your choice :"))
+            if choice == 1:
+                add_record()
+            elif choice == 2:
+                view_record()
+            elif choice == 3:
+                search_record()
+            elif choice == 4:
+                total_students()  
+            elif choice == 5:
+                high_score()
+            elif choice == 6:
+                lowest_score()  
+            elif choice ==7:
+                break
+            else:
+                print("please choose between valid choice (1 - 7)")            
+        except ValueError:
+            print("please enter the valid input in numeric")
+    
+
         
 def add_record():
       question = "y"
       while question == "y":
         name = input("enter the name of the student :").title()
-        age = int(input("enter the age of the student :"))
-        marks = int(input("enter the marks of the student :"))
+        while True:    
+            try:
+                age = int(input("enter the age of the student :"))
+                break
+            except ValueError:
+                print("Please enter age as numbers only. ")
+        while True:    
+            try:
+                marks = int(input("enter the marks of the student :"))
+                break
+            except ValueError:
+                print("Please enter marks as numbers only. ")
         with open("students.txt", "a") as f:
             f.write(f"{name},{age},{marks}\n")
         question = input("do you want to add another record? (y/n) :").lower()
@@ -41,12 +56,20 @@ def add_record():
             question = input("do you want to add another record? (y/n) :").lower()
 
 def view_record():
-    print("name\tage\tmarks")
-    print('-' * 30)
-    with open("students.txt","r") as f:
-        for line in f:
-            name, age, marks =line.strip().split(",")
-            print(f"{name}\t{age}\t{marks}")
+    try:
+        with open("students.txt","r") as f:
+            first_line = f.readline()
+            if first_line == "":
+                print("no records found")
+            else:
+                print("name\tage\tmarks")
+                print('-' * 30)
+            f.seek(0)
+            for line in f:
+                name, age, marks =line.strip().split(",")
+                print(f"{name}\t{age}\t{marks}")
+    except FileNotFoundError:
+        print("no students record found")
 
 def search_record():
     search_name = input("enter the name of the student :").title()
