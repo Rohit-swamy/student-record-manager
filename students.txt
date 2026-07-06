@@ -1,2 +1,2 @@
-Rohit,21,98
-Rohit,22,100
+Rohit,21,90
+Amit,22,100

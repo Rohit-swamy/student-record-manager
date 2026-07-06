@@ -7,7 +7,9 @@ def menu():
     print("4. Total students record")
     print("5. highest marked students record")
     print("6. lowest marked students record")
-    print("7. exit")
+    print("7. update the stuent record")
+    print("8. delete student record")
+    print("9. exit")
     while True:
         try:
             choice = int(input("enter your choice :"))
@@ -23,7 +25,11 @@ def menu():
                 high_score()
             elif choice == 6:
                 lowest_score()  
-            elif choice ==7:
+            elif choice == 7:
+                update_record()
+            elif choice == 8:
+                delete_record()
+            elif choice == 9:
                 break
             else:
                 print("please choose between valid choice (1 - 7)")            
@@ -73,23 +79,26 @@ def view_record():
 
 def search_record():
     search_name = input("enter the name of the student :").title()
-    print("name\tage\tmarks")
-    print('-' * 30)
     with open("students.txt","r") as f:
+        found = False
         for line in f:
             name, age, marks =line.strip().split(",")
             if name == search_name:
+                found = True
                 name, age, marks =line.strip().split(",")
-                print(f"{name}\t{age}\t{marks}")
-        else:
+        if not found:
             print("student not found")
+        else:
+            print("name\tage\tmarks")
+            print('-' * 30)
+            print(f"{name}\t{age}\t{marks}")
 
 def total_students():
     total_students = 0
     with open("students.txt","r") as f:
         for line in f:
             line.split(",")
-            count +=1
+            total_students +=1
         print("Total students :", total_students)
 
 def high_score():
@@ -137,4 +146,61 @@ def lowest_score():
             print("----------------")
             for student in students:
                 print(student)
+
+def update_record():
+    name_to_update = input("Enter name of the student to update the record :").title()
+    with open("students.txt", "r") as f:
+        record = f.readlines()
+        new_record = []
+        found = False
+        for line in record:
+            name, age, marks = line.strip().split(",")
+            marks = int(marks)
+            if name == name_to_update:
+                found = True
+                while True:
+                    try:
+                        new_age = int(input("enter the new age :"))
+                        break
+                    except ValueError:
+                        print("please enter the valid age")
+                while True:
+                    try:
+                        new_marks = int(input("enter the new marks :"))
+                        break
+                    except ValueError:
+                        print("please enter the valid marks")
+                new_record.append(f"{name},{new_age},{new_marks}\n")
+            else:
+                new_record.append(line)
+        if not found:
+            print("student record not found")
+        else:
+            with open("students.txt", "w") as f:
+                f.writelines(new_record)
+            print("student record updated successfully")      
+            view_record()
+
+def delete_record():
+    name_to_delete = input("Enter name of the student to delete the record :").title()
+    with open("students.txt", "r") as f:
+        record = f.readlines()
+        new_record = []
+        found = False
+        for line in record:
+            name, age, marks = line.strip().split(",")
+            marks = int(marks)
+            if name == name_to_delete:
+                found = True
+            else:
+                new_record.append(line)
+        if not found:
+            print("student record not found")
+        else:
+            with open("students.txt", "w") as f:
+                f.writelines(new_record)
+            print("student record deleted successfully") 
+            view_record()
+
+
 print(menu())
