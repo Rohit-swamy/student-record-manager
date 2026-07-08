@@ -1,2 +1,8 @@
 Rohit,21,90
 Amit,22,100
+Abhay,21,70
+Arushi,21,60
+Pranay,21,30
+Johnson,21,65
+Bhairav,21,98
+Akash,21,20

@@ -9,7 +9,8 @@ def menu():
     print("6. lowest marked students record")
     print("7. update the stuent record")
     print("8. delete student record")
-    print("9. exit")
+    print("9. Student statistics record")
+    print("10. exit")
     while True:
         try:
             choice = int(input("enter your choice :"))
@@ -30,9 +31,11 @@ def menu():
             elif choice == 8:
                 delete_record()
             elif choice == 9:
+                student_statistics()
+            elif choice == 10:
                 break
             else:
-                print("please choose between valid choice (1 - 7)")            
+                print("please choose between valid choice (1 - 10)")            
         except ValueError:
             print("please enter the valid input in numeric")
     
@@ -68,12 +71,14 @@ def view_record():
             if first_line == "":
                 print("no records found")
             else:
-                print("name\tage\tmarks")
+                print("name\tage\tmarks\tgrade")
                 print('-' * 30)
             f.seek(0)
             for line in f:
                 name, age, marks =line.strip().split(",")
-                print(f"{name}\t{age}\t{marks}")
+                marks = int(marks)
+                grade = calculate_grade(marks)
+                print(f"{name}\t{age}\t{marks}\t{grade}")
     except FileNotFoundError:
         print("no students record found")
 
@@ -202,5 +207,58 @@ def delete_record():
             print("student record deleted successfully") 
             view_record()
 
+def calculate_grade(marks):
+    if not (0 <= marks <= 100):
+        raise ValueError("marks should be between 0 & 100")
+    if marks >= 90:
+        return "A"
+    elif marks >= 75:
+        return "B"
+    elif marks >= 60:
+        return "C"
+    elif marks >= 40:
+        return "D"
+    else:
+        return "F"
+
+def student_statistics():
+    total_students = 0
+    total_marks = 0
+    highest_marks = 0
+    lowest_marks = 100
+    pass_students = 0
+    fail_students = 0
+    with open("students.txt", "r") as f:
+        for line in f:
+            name, age, marks = line.strip().split(",")
+            marks = int(marks)
+            total_students += 1
+            total_marks += marks
+            if marks > highest_marks:
+                highest_marks = marks
+            
+            if marks < lowest_marks:
+                lowest_marks = marks
+            
+            grade = calculate_grade(marks)
+            if grade in "F":
+                fail_students += 1
+            else:
+                pass_students += 1
+        
+        if total_students == 0:
+            print("no students record found")
+            return 
+        
+        average_marks = round(total_marks / total_students, 2)
+
+        print("=======Students Statistics=======")
+        print("Total students :", total_students)
+        print("Highest marks :", highest_marks)
+        print("Lowest marks :", lowest_marks)
+        print("Average marks :", average_marks)
+        print("Pass students :", pass_students)
+        print("Fail students :", fail_students)
+        print("-----------------------")
 
 print(menu())
